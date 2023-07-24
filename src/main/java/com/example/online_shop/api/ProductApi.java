@@ -1,6 +1,7 @@
 package com.example.online_shop.api;
 
 import com.example.online_shop.dto.ProductRequest;
+import com.example.online_shop.dto.ProductResponse;
 import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,11 @@ public class ProductApi {
     @PutMapping("/{id}")
     SimpleResponse updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long id) {
         return productService.update(productRequest, id);
+    }
+
+    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @GetMapping("/{id}")
+    ProductResponse findById(@PathVariable Long id) {
+        return productService.findById(id);
     }
 }
