@@ -40,15 +40,15 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadRequestException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse badCredential(BadRequestException b) {
-        return new ExceptionResponse(HttpStatus.FORBIDDEN,
+        return new ExceptionResponse(HttpStatus.BAD_REQUEST,
                 b.getClass().getSimpleName(),
                 b.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ExceptionResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String error = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining("; "));

@@ -4,6 +4,7 @@ import com.example.online_shop.dto.ProductRequest;
 import com.example.online_shop.dto.ProductResponse;
 import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.entities.Product;
+import com.example.online_shop.exceptions.NotFoundException;
 import com.example.online_shop.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +52,7 @@ public class ProductService {
 
     public ProductResponse findById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                () -> new RuntimeException(String.format("No product with such an id: %s", id))
+                () -> new NotFoundException(String.format("No product with such an id: %s", id))
         );
         return ProductResponse.builder()
                 .id(product.getId())
