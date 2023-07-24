@@ -1,0 +1,2 @@
+insert into users(id ,email, password, name ,role) values(1,'aika@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Aika','ADMIN');
+insert into users(id ,email, password, name ,role) values(2,'client@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Client','CLIENT');
