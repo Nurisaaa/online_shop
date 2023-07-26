@@ -20,7 +20,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .components(new Components()
                         .addSecuritySchemes(API_KEY, apiKeySecuritySchema()))
-                .info(new Info().title("MedCheck").description(
+                .info(new Info().title("Online Shop API").description(
                         "This is a sample Spring Boot RESTful service using springdoc-openapi and OpenAPI 3."))
                 .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
     }
