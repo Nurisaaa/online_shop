@@ -19,4 +19,22 @@ public class ProductResponse {
     private List<String> sizes;
     private String color;
     private LocalDate dateOfCreation;
+
+    public ProductResponse(Long id,
+                           String title,
+                           int price,
+                           List<String> images,
+                           String category,
+                           List<String> sizes,
+                           String color,
+                           LocalDate dateOfCreation) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.images = images;
+        this.category = category;
+        this.sizes = sizes;
+        this.color = color;
+        this.dateOfCreation = dateOfCreation;
+    }
 }

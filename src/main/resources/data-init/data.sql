@@ -1,2 +1,11 @@
 insert into users(id ,email, password, name ,role) values(1,'aika@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Aika','ADMIN');
 insert into users(id ,email, password, name ,role) values(2,'client@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Client','CLIENT');
+insert into products(id ,title, price, color, category, date_of_creation) values(1,'Product 1', 100, 'Blue', 'Женская', '2021-01-01');
+insert into products(id ,title, price, color, category, date_of_creation) values(2,'Product 2', 200, 'Red', 'Мужская', '2021-01-01');
+insert into products(id ,title, price, color, category, date_of_creation) values(3,'Product 3', 300, 'Green', 'Детская', '2021-01-01');
+insert into product_sizes(product_id, sizes) values(1, 'S');
+insert into product_sizes(product_id, sizes) values(1, 'M');
+insert into product_sizes(product_id, sizes) values(2, 'L');
+insert into product_sizes(product_id, sizes) values(2, 'L');
+insert into product_sizes(product_id, sizes) values(3, 'XXL');
+insert into product_sizes(product_id, sizes) values(3, 'XL');

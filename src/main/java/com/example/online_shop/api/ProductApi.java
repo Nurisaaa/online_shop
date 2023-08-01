@@ -8,9 +8,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
+@CrossOrigin
 public class ProductApi {
 
     private final ProductService productService;
@@ -37,5 +40,11 @@ public class ProductApi {
     @GetMapping("/{id}")
     ProductResponse findById(@PathVariable Long id) {
         return productService.findById(id);
+    }
+
+    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @GetMapping
+    List<ProductResponse> findAll(@RequestParam(required = false) String category, @RequestParam(required = false) String size) {
+        return productService.findAll(category, size);
     }
 }

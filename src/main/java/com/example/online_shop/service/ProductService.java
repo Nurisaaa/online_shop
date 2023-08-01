@@ -5,15 +5,19 @@ import com.example.online_shop.dto.ProductResponse;
 import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.entities.Product;
 import com.example.online_shop.exceptions.NotFoundException;
+import com.example.online_shop.repositories.CustomProductRepository;
 import com.example.online_shop.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CustomProductRepository customProductRepository;
 
     public SimpleResponse save(ProductRequest productRequest) {
         Product product = new Product(productRequest);
@@ -26,7 +30,7 @@ public class ProductService {
     @Transactional
     public SimpleResponse update(ProductRequest productRequest, Long id) {
         Product product = productRepository.findById(id).orElseThrow(
-                () -> new RuntimeException(String.format("No product with such an id: %s", id))
+                () -> new NotFoundException(String.format("No product with such an id: %s", id))
         );
         product.setTitle(productRequest.getTitle());
         product.setPrice(productRequest.getPrice());
@@ -42,7 +46,7 @@ public class ProductService {
 
     public SimpleResponse delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new RuntimeException(String.format("No product with such an id: %s", id));
+            throw new NotFoundException(String.format("No product with such an id: %s", id));
         }
         productRepository.deleteById(id);
         return SimpleResponse.builder()
@@ -66,5 +70,7 @@ public class ProductService {
                 .build();
     }
 
-
+    public List<ProductResponse> findAll(String category, String size){
+        return customProductRepository.getProducts(category, size);
+    }
 }
