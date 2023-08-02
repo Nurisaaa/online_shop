@@ -40,6 +40,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole())
                 .build();
