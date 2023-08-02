@@ -16,12 +16,12 @@ public class AuthApi {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signUp")
-    AuthenticationResponse signUp(@RequestParam SignUpRequest signUpRequest) {
+    AuthenticationResponse signUp(@RequestBody SignUpRequest signUpRequest) {
         return authenticationService.signUp(signUpRequest);
     }
 
     @PostMapping("/signIn")
-    AuthenticationResponse signIn(@RequestParam AuthenticationRequest authenticationRequest) {
+    AuthenticationResponse signIn(@RequestBody AuthenticationRequest authenticationRequest) {
         return authenticationService.signIn(authenticationRequest);
     }
 
