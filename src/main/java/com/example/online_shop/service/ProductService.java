@@ -4,11 +4,13 @@ import com.example.online_shop.dto.ProductRequest;
 import com.example.online_shop.dto.ProductResponse;
 import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.entities.Product;
+import com.example.online_shop.entities.User;
 import com.example.online_shop.exceptions.NotFoundException;
 import com.example.online_shop.repositories.CustomProductRepository;
 import com.example.online_shop.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -72,5 +74,30 @@ public class ProductService {
 
     public List<ProductResponse> findAll(String category, String size){
         return customProductRepository.getProducts(category, size);
+    }
+
+    public SimpleResponse addOrRemoveFromFavorites(Long id, Authentication authentication) {
+        User user = (User) authentication.getAuthorities();
+        String message = "";
+        if (!user.getFavorites().isEmpty()) {
+            for (Product product : user.getFavorites()) {
+                if (product.getId().equals(id)) {
+                    user.getFavorites().remove(product);
+                    message = String.format("Product with id: %s successfully removed from favorites!", id);
+                } else {
+                    user.getFavorites().add(product);
+                    message = String.format("Product with id: %s successfully added to favorites!", id);
+                }
+            }
+        }else {
+            Product product = productRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException(String.format("No product with such an id: %s", id))
+            );
+            user.getFavorites().add(product);
+            message = String.format("Product with id: %s successfully added to favorites!", id);
+        }
+        return SimpleResponse.builder()
+                .message(message)
+                .build();
     }
 }

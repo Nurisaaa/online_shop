@@ -6,6 +6,7 @@ import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,5 +47,11 @@ public class ProductApi {
     @GetMapping
     List<ProductResponse> findAll(@RequestParam(required = false) String category, @RequestParam(required = false) String size) {
         return productService.findAll(category, size);
+    }
+
+    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @PostMapping("/favorites")
+    SimpleResponse addOrRemoveFromFavorites(@RequestParam Long id, Authentication authentication) {
+        return productService.addOrRemoveFromFavorites(id, authentication);
     }
 }

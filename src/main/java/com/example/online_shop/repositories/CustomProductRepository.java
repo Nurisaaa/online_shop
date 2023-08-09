@@ -115,7 +115,6 @@ public class CustomProductRepository {
         """;
 
         for (ProductResponse response : productResponse) {
-            // Pass response.getId() as a parameter for getSizes and getImages queries
             List<String> sizes = jdbcTemplate.query(getSizes, (resultSet, row) ->
                             resultSet.getString("sizes"),
                     response.getId()

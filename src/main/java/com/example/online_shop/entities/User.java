@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Getter
@@ -26,6 +27,9 @@ public class User implements UserDetails {
     private Role role;
     private String email;
     private String password;
+
+    @OneToMany
+    private List<Product> favorites;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
