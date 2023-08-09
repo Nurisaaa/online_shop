@@ -34,7 +34,6 @@ public class Product {
     public Product(ProductRequest productRequest) {
         this.title = productRequest.getTitle();
         this.price = productRequest.getPrice();
-        this.images = productRequest.getImages();
         this.category = productRequest.getCategory();
         this.sizes = productRequest.getSizes();
         this.color = productRequest.getColor();
