@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class ProductApi {
 
     @PostAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    SimpleResponse saveProduct(@RequestBody ProductRequest productRequest) {
+    SimpleResponse saveProduct(@RequestBody ProductRequest productRequest) throws IOException {
         return productService.save(productRequest);
     }
 
@@ -33,7 +34,7 @@ public class ProductApi {
 
     @PostAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    SimpleResponse updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long id) {
+    SimpleResponse updateProduct(@RequestBody ProductRequest productRequest, @PathVariable Long id) throws IOException {
         return productService.update(productRequest, id);
     }
 
