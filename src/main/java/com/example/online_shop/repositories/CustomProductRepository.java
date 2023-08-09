@@ -79,6 +79,18 @@ public class CustomProductRepository {
     }
 
     public List<ProductResponse> getProducts(String category, String size) {
+        String condition = "";
+        if (category == null && size == null){
+            condition = "";
+        } else if (category == null && size != null){
+            condition = String.format("WHERE ps.sizes = '%s'", size);
+        } else if (category != null && size == null){
+            condition = String.format("WHERE p.category = '%s'", category);
+        } else if (category != null && size != null){
+            condition = String.format("WHERE p.category = '%s' AND ps.sizes = '%s'", category, size);
+        }
+
+
         String sql = """
                 SELECT p.id as id,
                        p.title as title,
@@ -88,8 +100,7 @@ public class CustomProductRepository {
                        p.date_of_creation as dateOfCreation
                 FROM products p
                 LEFT JOIN product_sizes as ps ON p.id = ps.product_id
-                WHERE (? IS NULL OR p.category = ?)
-                AND (? IS NULL OR ps.sizes = ?)
+                """ + condition + """
                 GROUP BY p.id
                 ORDER BY p.date_of_creation DESC
         """;
