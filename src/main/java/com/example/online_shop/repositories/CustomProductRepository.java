@@ -114,8 +114,7 @@ public class CustomProductRepository {
                         .category(resultSet.getString("category"))
                         .color(resultSet.getString("color"))
                         .dateOfCreation(resultSet.getDate("dateOfCreation").toLocalDate())
-                        .build(),
-                category,category,size,size
+                        .build()
         );
 
         String getSizes = """
