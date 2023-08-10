@@ -55,4 +55,8 @@ public class ProductApi {
     SimpleResponse addOrRemoveFromFavorites(@RequestParam Long id, Authentication authentication) {
         return productService.addOrRemoveFromFavorites(id, authentication);
     }
+
+    List<ProductResponse> getFavorites(Authentication authentication) {
+        return productService.getFavorites(authentication);
+    }
 }

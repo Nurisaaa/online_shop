@@ -8,6 +8,7 @@ import com.example.online_shop.entities.User;
 import com.example.online_shop.exceptions.NotFoundException;
 import com.example.online_shop.repositories.CustomProductRepository;
 import com.example.online_shop.repositories.ProductRepository;
+import com.example.online_shop.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,10 +32,11 @@ public class ProductService {
     private final S3Client s3Client;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
+    private final UserRepository userRepository;
 
     public SimpleResponse save(ProductRequest productRequest) throws IOException {
         Product product = new Product(productRequest);
-        product.setImages(uploadImages(productRequest.getImages()));
+        product.setImage(uploadImages(productRequest.getImage()));
         productRepository.save(product);
         return SimpleResponse.builder()
                 .message("Product successfully saved!")
@@ -53,7 +54,7 @@ public class ProductService {
            product.setSizes(productRequest.getSizes());
            product.setColor(productRequest.getColor());
            product.setDateOfCreation(productRequest.getDateOfCreation());
-           product.setImages(uploadImages(productRequest.getImages()));
+           product.setImage(uploadImages(productRequest.getImage()));
         return SimpleResponse.builder()
                 .message(String.format("Product with id: %s successfully updated!", id))
                 .build();
@@ -77,7 +78,7 @@ public class ProductService {
                 .id(product.getId())
                 .title(product.getTitle())
                 .price(product.getPrice())
-                .images(product.getImages())
+                .image(product.getImage())
                 .category(product.getCategory())
                 .sizes(product.getSizes())
                 .color(product.getColor())
@@ -114,9 +115,7 @@ public class ProductService {
                 .build();
     }
 
-    private List<String> uploadImages(List<MultipartFile> images) throws IOException {
-        List<String> uploadedImages = new ArrayList<>();
-        for (MultipartFile file : images ){
+    private String uploadImages(MultipartFile file) throws IOException {
             String key = System.currentTimeMillis() + file.getOriginalFilename();
             PutObjectRequest put = PutObjectRequest.builder()
                     .bucket(BUCKET_NAME)
@@ -126,8 +125,11 @@ public class ProductService {
                     .key(key)
                     .build();
             s3Client.putObject(put, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-            uploadedImages.add(BUCKET_PATH + key);
-        }
-        return uploadedImages;
+            return BUCKET_PATH + key;
+    }
+
+    public List<ProductResponse> getFavorites(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        return customProductRepository.getFavorites(user.getId());
     }
 }

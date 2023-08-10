@@ -14,7 +14,7 @@ public class ProductResponse {
     private Long id;
     private String title;
     private int price;
-    private List<String> images;
+    private String image;
     private String category;
     private List<String> sizes;
     private String color;
@@ -23,7 +23,7 @@ public class ProductResponse {
     public ProductResponse(Long id,
                            String title,
                            int price,
-                           List<String> images,
+                           String image,
                            String category,
                            List<String> sizes,
                            String color,
@@ -31,7 +31,7 @@ public class ProductResponse {
         this.id = id;
         this.title = title;
         this.price = price;
-        this.images = images;
+        this.image = image;
         this.category = category;
         this.sizes = sizes;
         this.color = color;

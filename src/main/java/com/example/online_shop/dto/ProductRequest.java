@@ -19,7 +19,7 @@ public class ProductRequest {
     private String title;
     @NotBlank
     private int price;
-    private List<MultipartFile> images;
+    private MultipartFile image;
     @NonNull
     @NotBlank
     private String category;

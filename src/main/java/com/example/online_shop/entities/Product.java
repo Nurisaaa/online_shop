@@ -23,8 +23,7 @@ public class Product {
     private Long id;
     private String title;
     private int price;
-    @ElementCollection
-    private List<String> images;
+    private String image;
     private String category;
     @ElementCollection
     private List<String> sizes;
