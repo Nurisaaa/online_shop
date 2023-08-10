@@ -56,6 +56,8 @@ public class ProductApi {
         return productService.addOrRemoveFromFavorites(id, authentication);
     }
 
+    @PostAuthorize("hasAuthority('CLIENT')")
+    @GetMapping("/favorites")
     List<ProductResponse> getFavorites(Authentication authentication) {
         return productService.getFavorites(authentication);
     }
