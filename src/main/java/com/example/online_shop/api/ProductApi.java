@@ -6,7 +6,7 @@ import com.example.online_shop.dto.SimpleResponse;
 import com.example.online_shop.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -38,27 +38,28 @@ public class ProductApi {
         return productService.update(productRequest, id);
     }
 
-    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @GetMapping("/{id}")
     ProductResponse findById(@PathVariable Long id) {
         return productService.findById(id);
     }
 
-    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @GetMapping
     List<ProductResponse> findAll(@RequestParam(required = false) String category, @RequestParam(required = false) String size) {
         return productService.findAll(category, size);
     }
 
-    @PostAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
     @PostMapping("/favorites")
-    SimpleResponse addOrRemoveFromFavorites(@RequestParam Long id, Authentication authentication) {
-        return productService.addOrRemoveFromFavorites(id, authentication);
+    SimpleResponse addOrRemoveFromFavorites(@RequestParam Long id) {
+        return productService.addOrRemoveFromFavorites(id);
     }
 
-    @PostAuthorize("hasAuthority('CLIENT')")
+    @PreAuthorize("hasAuthority('CLIENT')")
     @GetMapping("/favorites")
-    List<ProductResponse> getFavorites(Authentication authentication) {
-        return productService.getFavorites(authentication);
+    List<ProductResponse> getFavorites() {
+        return productService.getFavorites();
     }
+
 }

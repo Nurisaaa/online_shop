@@ -1,10 +1,12 @@
 package com.example.online_shop.dto;
 
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -19,7 +21,7 @@ public class ProductRequest {
     private String title;
     @NotBlank
     private int price;
-    private MultipartFile image;
+    private List<MultipartFile> image;
     @NonNull
     @NotBlank
     private String category;

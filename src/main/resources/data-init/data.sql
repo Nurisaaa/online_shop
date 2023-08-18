@@ -1,8 +1,10 @@
 insert into users(id ,email, password, name ,role) values(1,'aika@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Aika','ADMIN');
-insert into users(id ,email, password, name ,role) values(2,'client@gmail.com', '$2a$12$g5QAiwQM0ypI4pP9OHwfKO7flRMY0lO1U9YYeAW9surOrqWHg8SQm','Client','CLIENT');
-insert into products(id ,title, price, color, category, date_of_creation) values(1,'Product 1', 100, 'Blue', 'FEMALE', '2021-01-01');
-insert into products(id ,title, price, color, category, date_of_creation) values(2,'Product 2', 200, 'Red', 'MALE', '2021-01-01');
-insert into products(id ,title, price, color, category, date_of_creation) values(3,'Product 3', 300, 'Green', 'CHILDREN', '2021-01-01');
+insert into users(id ,email, password, name ,role) values(2,'client@gmail.com', '$2a$12$IRBiOjPIL6PmHWcqwZR81.a7q/.LCK2CeeDXTyKCPlueIaCgeLuEm','Client','CLIENT');
+insert into users(id ,email, password, name ,role) values(3,'datka@gmail.com', '$2a$12$IRBiOjPIL6PmHWcqwZR81.a7q/.LCK2CeeDXTyKCPlueIaCgeLuEm','Client','CLIENT');
+insert into users(id ,email, password, name ,role) values(4,'aijamal@gmail.com', '$2a$12$IRBiOjPIL6PmHWcqwZR81.a7q/.LCK2CeeDXTyKCPlueIaCgeLuEm','Client','CLIENT');
+insert into products(id ,title, price, color, category, date_of_creation, image) values(1,'Product 1', 100, 'Blue', 'FEMALE', '2021-01-01','https://peaksoftbucket.s3.eu-central-1.amazonaws.com/1667200672046Screen%2BShot%2B2022-10-30%2Bat%2B23.14.10.png');
+insert into products(id ,title, price, color, category, date_of_creation, image) values(2,'Product 2', 200, 'Red', 'MALE', '2021-01-01','https://peaksoftbucket.s3.eu-central-1.amazonaws.com/1667200672046Screen%2BShot%2B2022-10-30%2Bat%2B23.14.10.png');
+insert into products(id ,title, price, color, category, date_of_creation, image) values(3,'Product 3', 300, 'Green', 'CHILDREN', '2021-01-01','https://peaksoftbucket.s3.eu-central-1.amazonaws.com/1667200672046Screen%2BShot%2B2022-10-30%2Bat%2B23.14.10.png');
 insert into product_sizes(product_id, sizes) values(1, 'S');
 insert into product_sizes(product_id, sizes) values(1, 'M');
 insert into product_sizes(product_id, sizes) values(2, 'L');

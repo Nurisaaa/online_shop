@@ -12,7 +12,7 @@ import com.example.online_shop.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -20,6 +20,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,9 +35,14 @@ public class ProductService {
     private final CustomProductRepository customProductRepository;
     private final UserRepository userRepository;
 
+    public User getAuthentication() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User with email: %s not found".formatted(email)));
+    }
     public SimpleResponse save(ProductRequest productRequest) throws IOException {
         Product product = new Product(productRequest);
-        product.setImage(uploadImages(productRequest.getImage()));
+        product.setImage(uploadImages(productRequest.getImage()).get(0));
         productRepository.save(product);
         return SimpleResponse.builder()
                 .message("Product successfully saved!")
@@ -54,7 +60,7 @@ public class ProductService {
            product.setSizes(productRequest.getSizes());
            product.setColor(productRequest.getColor());
            product.setDateOfCreation(productRequest.getDateOfCreation());
-           product.setImage(uploadImages(productRequest.getImage()));
+           product.setImage(uploadImages(productRequest.getImage()).get(0));
         return SimpleResponse.builder()
                 .message(String.format("Product with id: %s successfully updated!", id))
                 .build();
@@ -90,8 +96,9 @@ public class ProductService {
         return customProductRepository.getProducts(category, size);
     }
 
-    public SimpleResponse addOrRemoveFromFavorites(Long id, Authentication authentication) {
-        User user = (User) authentication.getAuthorities();
+    @Transactional
+    public SimpleResponse addOrRemoveFromFavorites(Long id) {
+        User user = getAuthentication();
         String message = "";
         if (!user.getFavorites().isEmpty()) {
             for (Product product : user.getFavorites()) {
@@ -107,7 +114,9 @@ public class ProductService {
             Product product = productRepository.findById(id).orElseThrow(
                     () -> new NotFoundException(String.format("No product with such an id: %s", id))
             );
-            user.getFavorites().add(product);
+            List<Product> favorites = new ArrayList<>();
+            favorites.add(product);
+            user.setFavorites(favorites);
             message = String.format("Product with id: %s successfully added to favorites!", id);
         }
         return SimpleResponse.builder()
@@ -115,7 +124,9 @@ public class ProductService {
                 .build();
     }
 
-    private String uploadImages(MultipartFile file) throws IOException {
+    private List<String> uploadImages(List<MultipartFile> files) throws IOException {
+        List<String> images = new ArrayList<>();
+        for (MultipartFile file : files) {
             String key = System.currentTimeMillis() + file.getOriginalFilename();
             PutObjectRequest put = PutObjectRequest.builder()
                     .bucket(BUCKET_NAME)
@@ -125,11 +136,13 @@ public class ProductService {
                     .key(key)
                     .build();
             s3Client.putObject(put, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-            return BUCKET_PATH + key;
+            images.add(BUCKET_PATH + key);
+        }
+        return images;
     }
 
-    public List<ProductResponse> getFavorites(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+    public List<ProductResponse> getFavorites() {
+        User user = getAuthentication();
         return customProductRepository.getFavorites(user.getId());
     }
 }

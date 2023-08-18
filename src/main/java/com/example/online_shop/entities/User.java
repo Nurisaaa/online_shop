@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
-    @OneToMany
-    private List<Product> favorites;
+    @ManyToMany
+    private List<Product> favorites = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -75,7 +75,7 @@ public class CustomProductRepository {
                        p.category as category,
                        p.color as color,
                        p.date_of_creation as dateOfCreation
-                       FROM products p join users_favorites f on p.id = f.product_id
+                       FROM products p join users_favorites f on p.id = f.favorites_id
                        WHERE f.user_id = ?
                        ORDER BY p.date_of_creation DESC
                 """;
