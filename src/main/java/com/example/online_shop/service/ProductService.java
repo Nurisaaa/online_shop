@@ -42,7 +42,7 @@ public class ProductService {
     }
     public SimpleResponse save(ProductRequest productRequest) throws IOException {
         Product product = new Product(productRequest);
-        product.setImage(uploadImages(productRequest.getImage()).get(0));
+        product.setImage(uploadImages(productRequest.getImages()).get(0));
         productRepository.save(product);
         return SimpleResponse.builder()
                 .message("Product successfully saved!")
@@ -60,7 +60,7 @@ public class ProductService {
            product.setSizes(productRequest.getSizes());
            product.setColor(productRequest.getColor());
            product.setDateOfCreation(productRequest.getDateOfCreation());
-           product.setImage(uploadImages(productRequest.getImage()).get(0));
+           product.setImage(uploadImages(productRequest.getImages()).get(0));
         return SimpleResponse.builder()
                 .message(String.format("Product with id: %s successfully updated!", id))
                 .build();
