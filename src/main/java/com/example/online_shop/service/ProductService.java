@@ -14,23 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    @Value("${aws-bucket-name}")
-    private String BUCKET_NAME;
-    @Value("${aws-bucket-path}")
-    private String BUCKET_PATH;
-    private final S3Client s3Client;
     private final ProductRepository productRepository;
     private final CustomProductRepository customProductRepository;
     private final UserRepository userRepository;
@@ -40,9 +31,8 @@ public class ProductService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with email: %s not found".formatted(email)));
     }
-    public SimpleResponse save(ProductRequest productRequest) throws IOException {
+    public SimpleResponse save(ProductRequest productRequest){
         Product product = new Product(productRequest);
-        product.setImage(uploadImages(productRequest.getImages()).get(0));
         productRepository.save(product);
         return SimpleResponse.builder()
                 .message("Product successfully saved!")
@@ -50,7 +40,7 @@ public class ProductService {
     }
 
     @Transactional
-    public SimpleResponse update(ProductRequest productRequest, Long id) throws IOException {
+    public SimpleResponse update(ProductRequest productRequest, Long id) {
         Product product = productRepository.findById(id).orElseThrow(
                 () -> new NotFoundException(String.format("No product with such an id: %s", id))
         );
@@ -60,7 +50,7 @@ public class ProductService {
            product.setSizes(productRequest.getSizes());
            product.setColor(productRequest.getColor());
            product.setDateOfCreation(productRequest.getDateOfCreation());
-           product.setImage(uploadImages(productRequest.getImages()).get(0));
+           product.setImage(product.getImage());
         return SimpleResponse.builder()
                 .message(String.format("Product with id: %s successfully updated!", id))
                 .build();
@@ -122,23 +112,6 @@ public class ProductService {
         return SimpleResponse.builder()
                 .message(message)
                 .build();
-    }
-
-    private List<String> uploadImages(List<MultipartFile> files) throws IOException {
-        List<String> images = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String key = System.currentTimeMillis() + file.getOriginalFilename();
-            PutObjectRequest put = PutObjectRequest.builder()
-                    .bucket(BUCKET_NAME)
-                    .contentType("jpeg")
-                    .contentType("png")
-                    .contentLength(file.getSize())
-                    .key(key)
-                    .build();
-            s3Client.putObject(put, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-            images.add(BUCKET_PATH + key);
-        }
-        return images;
     }
 
     public List<ProductResponse> getFavorites() {

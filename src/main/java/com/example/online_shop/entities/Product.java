@@ -37,5 +37,6 @@ public class Product {
         this.sizes = productRequest.getSizes();
         this.color = productRequest.getColor();
         this.dateOfCreation = productRequest.getDateOfCreation();
+        this.image = productRequest.getImages();
     }
 }

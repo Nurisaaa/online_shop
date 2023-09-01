@@ -74,7 +74,8 @@ public class CustomProductRepository {
                        p.price as price,
                        p.category as category,
                        p.color as color,
-                       p.date_of_creation as dateOfCreation
+                       p.date_of_creation as dateOfCreation,
+                       p.image as image
                        FROM products p join users_favorites f on p.id = f.favorites_id
                        WHERE f.user_id = ?
                        ORDER BY p.date_of_creation DESC
@@ -82,6 +83,7 @@ public class CustomProductRepository {
         List<ProductResponse> productResponse = jdbcTemplate.query(sql, (resultSet, row) -> ProductResponse.builder()
                 .id(resultSet.getLong("id"))
                 .title(resultSet.getString("title"))
+                .image(resultSet.getString("image"))
                 .price(resultSet.getInt("price"))
                 .category(resultSet.getString("category"))
                 .color(resultSet.getString("color"))
