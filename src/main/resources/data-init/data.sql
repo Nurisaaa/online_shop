@@ -26,3 +26,4 @@ insert into product_sizes(product_id, sizes) values(7, 'XL');
 insert into product_sizes(product_id, sizes) values(8, 'S');
 insert into product_sizes(product_id, sizes) values(8, 'M');
 insert into product_sizes(product_id, sizes) values(9, 'L');
+insert into product_sizes(product_id, sizes) values(10, 'M');

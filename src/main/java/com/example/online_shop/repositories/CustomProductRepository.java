@@ -32,7 +32,8 @@ public class CustomProductRepository {
                        p.price as price,
                        p.category as category,
                        p.color as color,
-                       p.date_of_creation as dateOfCreation
+                       p.date_of_creation as dateOfCreation,
+                       p.image as image
                 FROM products p
                 LEFT JOIN product_sizes as ps ON p.id = ps.product_id
                 """ + condition + """
