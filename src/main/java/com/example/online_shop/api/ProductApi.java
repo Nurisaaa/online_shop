@@ -62,4 +62,15 @@ public class ProductApi {
         return productService.getFavorites();
     }
 
+    @PreAuthorize("hasAuthority('CLIENT')")
+    @GetMapping("/basket")
+    List<ProductResponse> getBasket(){
+        return productService.getBasket();
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'CLIENT')")
+    @PostMapping("/basket")
+    SimpleResponse addOrRemoveFromBasket(@RequestParam Long id) {
+        return productService.addOrRemoveFromBasket(id);
+    }
 }

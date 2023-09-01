@@ -31,6 +31,8 @@ public class User implements UserDetails {
 
     @ManyToMany
     private List<Product> favorites = new ArrayList<>();
+    @ManyToMany
+    private List<Product> baskets = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

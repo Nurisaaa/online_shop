@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,25 +87,16 @@ public class ProductService {
     public SimpleResponse addOrRemoveFromFavorites(Long id) {
         User user = getAuthentication();
         String message = "";
-        if (!user.getFavorites().isEmpty()) {
-            for (Product product : user.getFavorites()) {
-                if (product.getId().equals(id)) {
-                    user.getFavorites().remove(product);
-                    message = String.format("Product with id: %s successfully removed from favorites!", id);
-                } else {
-                    user.getFavorites().add(product);
-                    message = String.format("Product with id: %s successfully added to favorites!", id);
-                }
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("No product with such an id: %s", id))
+        );
+            if(user.getFavorites().contains(product)){
+                user.getFavorites().remove(product);
+                message = String.format("Product with id: %s successfully removed to favorites!", id);
+            }else {
+                user.getFavorites().add(product);
+                message = String.format("Product with id: %s successfully added to favorites!", id);
             }
-        }else {
-            Product product = productRepository.findById(id).orElseThrow(
-                    () -> new NotFoundException(String.format("No product with such an id: %s", id))
-            );
-            List<Product> favorites = new ArrayList<>();
-            favorites.add(product);
-            user.setFavorites(favorites);
-            message = String.format("Product with id: %s successfully added to favorites!", id);
-        }
         return SimpleResponse.builder()
                 .message(message)
                 .build();
@@ -115,5 +105,29 @@ public class ProductService {
     public List<ProductResponse> getFavorites() {
         User user = getAuthentication();
         return customProductRepository.getFavorites(user.getId());
+    }
+
+    public List<ProductResponse> getBasket() {
+        User user = getAuthentication();
+        return customProductRepository.getBasket(user.getId());
+    }
+
+    @Transactional
+    public SimpleResponse addOrRemoveFromBasket(Long id) {
+        User user = getAuthentication();
+        String message = "";
+        Product product = productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException(String.format("No product with such an id: %s", id))
+        );
+            if (user.getBaskets().contains(product)) {
+                user.getBaskets().remove(product);
+                message = String.format("Product with id: %s successfully removed to basket!", id);
+            } else {
+                user.getBaskets().add(product);
+                message = String.format("Product with id: %s successfully added to basket!", id);
+            }
+            return SimpleResponse.builder()
+                    .message(message)
+                    .build();
     }
 }
