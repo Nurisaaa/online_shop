@@ -30,13 +30,12 @@ public class CustomProductRepository {
                 SELECT p.id as id,
                        p.title as title,
                        p.price as price,
+                       p.image as image,
                        p.category as category,
                        p.color as color,
-                       p.date_of_creation as dateOfCreation,
-                       pi.image as image
+                       p.date_of_creation as dateOfCreation
                 FROM products p
                 LEFT JOIN product_sizes as ps ON p.id = ps.product_id
-                LEFT JOIN product_image as pi ON p.id = pi.product_id
                 """ + condition + """
                 GROUP BY p.id
                 ORDER BY p.date_of_creation DESC
@@ -48,6 +47,7 @@ public class CustomProductRepository {
                         .id(resultSet.getLong("id"))
                         .title(resultSet.getString("title"))
                         .price(resultSet.getInt("price"))
+                        .image(resultSet.getString("image"))
                         .category(resultSet.getString("category"))
                         .color(resultSet.getString("color"))
                         .dateOfCreation(resultSet.getDate("dateOfCreation").toLocalDate())
@@ -74,12 +74,11 @@ public class CustomProductRepository {
                 SELECT p.id as id,
                        p.title as title,
                        p.price as price,
+                       p.image as image
                        p.category as category,
                        p.color as color,
-                       p.date_of_creation as dateOfCreation,
-                       pi.image as image
+                       p.date_of_creation as dateOfCreation
                        FROM products p join users_favorites f on p.id = f.favorites_id
-                       LEFT JOIN product_image as pi ON p.id = pi.product_id
                        WHERE f.user_id = ?
                        ORDER BY p.date_of_creation DESC
                 """;
@@ -112,13 +111,13 @@ public class CustomProductRepository {
                 SELECT p.id as id,
                        p.title as title,
                        p.price as price,
+                       p.image as image
                        p.category as category,
                        p.color as color,
                        p.date_of_creation as dateOfCreation,
-                       pi.image as image
                        FROM products p join users_baskets b on p.id = b.baskets_id
-                       LEFT JOIN product_image as pi ON p.id = pi.product_id
                        WHERE b.user_id = ?
+                       GROUP BY p.id
                        ORDER BY p.date_of_creation DESC
                 """;
         List<ProductResponse> productResponse = jdbcTemplate.query(sql, (resultSet, row) -> ProductResponse.builder()
