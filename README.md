@@ -1,8 +1,8 @@
-# Microservice Practice Doc
+# Online Shop Practice
 
 # About Project
 
-> A simple online store application for practicing microservices 
+> A simple online store application for students 
 >
 
 # What we can do inside of our project?
